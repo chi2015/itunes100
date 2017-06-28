@@ -123,3 +123,17 @@ a.dl_link img {
 	height: auto;
 }
 
+.itunes-player {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.itunes-player.play {
+	background-image: url('/itunes100/itunes-play.png');
+}
+
+.itunes-player.pause {
+	background-image: url('/itunes100/itunes-pause.png');
+}
+
