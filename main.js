@@ -65,19 +65,14 @@ function initSelectCountry() {
 function previewTrack(num) {
 var el = document.getElementById('player-'+num), track = document.getElementById('audio-'+num);
 if (el.className == "itunes-player play") {
+    if (!track.paused) resetFadeAudio(track);
+    track.play();
     el.className = "itunes-player pause";
-      	if (!track.paused) {
-      		clearInterval(fadeAudioInterval);
-      		track.pause();
-      		track.volume=1;
-            track.currentTime = 0;
-      	}  
-      	track.play();
   }
   else
   if (el.className == "itunes-player pause") {
-  	el.className = "itunes-player play";
   	if (!track.paused) track.pause();
+  	el.className = "itunes-player play";
   }
 }
 
@@ -91,10 +86,13 @@ function playOneEvent(audios) {
 		};
 		audios[i].onended = function(e) {
 			var track = e.target;
-			track.currentTime = 0;
-			var num = getTrackNum(track);
-			previewTrack(num);
-			previewTrack(num+1 >= audios.length ? 0 : num+1);
+			if (!fadeAudioInterval) {
+				track.currentTime = 0;
+				var num = getTrackNum(track);
+				previewTrack(num);
+				previewTrack(num+1 >= audios.length ? 0 : num+1);
+			}
+			else resetFadeAudio(track);
 		}; 
 		
 		}
@@ -104,24 +102,27 @@ function getTrackNum(track) {
 	return +track.id.substring(6);
 }
 
-function onEndTrackPlay(track, num, tracks_length) {
-	        track.currentTime = 0;
-			previewTrack(num);
-			previewTrack(num+1 >= tracks_length ? 0 : num+1);
+var fadeAudioInterval = null;
+
+function resetFadeAudio(audio) {
+	clearInterval(fadeAudioInterval);
+    fadeAudioInterval = null;
+    audio.pause();
+    audio.volume=1;
+    audio.currentTime = 0;
+    audio.parentNode.className = "itunes-player play";
 }
 
 function fadeAudio(audio) {
-	   fadeAudioInterval = setInterval(function () {
+	   if (fadeAudioInterval) resetFadeAudio(audio);
+	   else fadeAudioInterval = setInterval(function () {
         audio.parentNode.className = "itunes-player play";
         if (audio.volume >= 0.1) audio.volume -= 0.1;
         // When volume at zero stop all the intervalling
         else {
-            clearInterval(fadeAudioInterval);
-            audio.pause();
-            audio.currentTime = 0;
-            audio.volume = 1;
+            resetFadeAudio(audio);
         }
-    }, 200);
+    	}, 100);
 }
 
 window.onload = function() {
