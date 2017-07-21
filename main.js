@@ -19,11 +19,11 @@ function parseResponse(res) {
 			var n = i+1;
 			ret_str += '<tr><td>' 
 			+ n.toString() + '</td><td>'
-			+ '<div onclick="previewTrack('+i+');" class="itunes-player play" id="player-'+i+'">'+
+			+ (top100[i]['link'] && top100[i]['link'][1] && top100[i]['link'][1]['attributes'] ? '<div onclick="previewTrack('+i+');" class="itunes-player play" id="player-'+i+'">'+
 			'<audio class="itunes-audio" id="audio-'+i+'"' 
 			+' type="'+top100[i]['link'][1]['attributes']['type']+'"'
 			+' src="'+top100[i]['link'][1]['attributes']['href']+'"/>'
-			+'</div></td><td>'
+			+'</div>' : '') + '</td><td>'
 			+top100[i]['im:artist']['label'] + ' - ' 
 			+ top100[i]['im:name']['label'] + 
 			'</td><td><a title="Download in iTunes" href="'
