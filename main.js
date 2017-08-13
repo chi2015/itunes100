@@ -4,6 +4,7 @@ countries = {
 	'au':'Australia',
 	'ca':'Canada',
 	'nz':'New Zealand',
+	'ie':'Ireland',
 	'ru':'Russia'
 }
 
