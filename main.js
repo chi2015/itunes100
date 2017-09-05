@@ -67,7 +67,7 @@ function previewTrack(num) {
 var el = document.getElementById('player-'+num), track = document.getElementById('audio-'+num);
 if (el.className == "itunes-player play") {
     if (!track.paused) resetFadeAudio(track);
-    track.play();
+    var play_res = track.play();
     el.className = "itunes-player pause";
   }
   else
@@ -89,9 +89,10 @@ function playOneEvent(audios) {
 			var track = e.target;
 			if (!fadeAudioInterval) {
 				track.currentTime = 0;
-				var num = getTrackNum(track);
-				previewTrack(num);
-				previewTrack(num+1 >= audios.length ? 0 : num+1);
+				var num = getTrackNum(track),
+				next_num = num+1 >= audios.length ? 0 : num+1;
+				document.getElementById('player-'+num).click();
+				document.getElementById('player-'+next_num).click();
 			}
 			else resetFadeAudio(track);
 		}; 
@@ -118,8 +119,11 @@ function fadeAudio(audio) {
 	   if (fadeAudioInterval) resetFadeAudio(audio);
 	   else fadeAudioInterval = setInterval(function () {
         audio.parentNode.className = "itunes-player play";
-        if (audio.volume >= 0.1) audio.volume -= 0.1;
-        // When volume at zero stop all the intervalling
+        if (audio.volume >= 0.1) { 
+        	var old_volume = audio.volume;
+        	audio.volume -= 0.1;
+        	if (audio.volume === old_volume) resetFadeAudio(audio);
+        }
         else {
             resetFadeAudio(audio);
         }
