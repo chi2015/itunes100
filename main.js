@@ -68,7 +68,12 @@ var el = document.getElementById('player-'+num), track = document.getElementById
 if (el.className == "itunes-player play") {
     if (!track.paused) resetFadeAudio(track);
     var play_res = track.play();
-    el.className = "itunes-player pause";
+    if (play_res !== undefined) {
+        	play_res.then(function() {
+            	el.className = "itunes-player pause";
+        	}).catch(function(error) {
+    	});
+	} else el.className = "itunes-player pause";
   }
   else
   if (el.className == "itunes-player pause") {
