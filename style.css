@@ -141,3 +141,11 @@ a.dl_link img {
 	background-image: url('/itunes100/itunes-pause.png');
 }
 
+.itunes-player.error {
+	background-image: url('/itunes100/itunes-error.png');
+}
+
+.itunes-player.loading {
+	background-image: url('/itunes100/itunes-loading.png');
+}
+

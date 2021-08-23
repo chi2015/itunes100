@@ -68,10 +68,12 @@ var el = document.getElementById('player-'+num), track = document.getElementById
 if (el.className == "itunes-player play") {
     if (!track.paused) resetFadeAudio(track);
     var play_res = track.play();
+    el.className = "itunes-player loading";
     if (play_res !== undefined) {
         	play_res.then(function() {
             	el.className = "itunes-player pause";
         	}).catch(function(error) {
+        	el.className = "itunes-player error";
     	});
 	} else el.className = "itunes-player pause";
   }
@@ -79,7 +81,7 @@ if (el.className == "itunes-player play") {
   if (el.className == "itunes-player pause") {
   	if (!track.paused) track.pause();
   	el.className = "itunes-player play";
-  }
+  } else if (el.className == "itunes-player error") el.className = "itunes-player play";
 }
 
 function playOneEvent(audios) {
